@@ -12,41 +12,44 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+// DB is the global variable representing the database connection.
 var DB *gorm.DB
 
+// DBConnection establishes a connection to the database using the configuration provided in the environment variables.
 func DBConnection() {
-	// Cargar variables de entorno desde el archivo .env
+	// Load environment variables from the .env file
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	// Construir el DSN (Data Source Name) a partir de las variables de entorno
+	// Construct the Data Source Name (DSN) from environment variables
 	DSN := "host=" + os.Getenv("DB_HOST") +
 		" user=" + os.Getenv("DB_USER") +
 		" password=" + os.Getenv("DB_PASSWORD") +
 		" dbname=" + os.Getenv("DB_NAME") +
 		" port=" + os.Getenv("DB_PORT")
 
-	// Configurar las opciones del GORM
+	// Configure GORM options
 	dbConfig := &gorm.Config{
 		Logger: logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 			logger.Config{
-				SlowThreshold:             time.Second, // Umbral para las consultas lentas
-				LogLevel:                  logger.Info, // Establece el nivel de log a Info
-				IgnoreRecordNotFoundError: true,        // Ignorar el error ErrRecordNotFound para el logger
-				Colorful:                  false,       // Desactiva el color
+				SlowThreshold:             time.Second,  // Threshold for slow queries
+				LogLevel:                  logger.Error, // Set log level to Error
+				IgnoreRecordNotFoundError: true,         // Ignore ErrRecordNotFound error for the logger
+				Colorful:                  false,        // Disable color
 			},
 		),
 	}
 
-	// Conectar a la base de datos
+	// Connect to the database
 	DB, err = gorm.Open(postgres.Open(DSN), dbConfig)
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
 
+	// Auto migrate models
 	DB.AutoMigrate(models.User{}, models.Task{})
 
 	log.Println("Database connected")

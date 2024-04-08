@@ -1,30 +1,30 @@
-version: "3.8" # Versión de Docker Compose que se utilizará.
+version: "3.8" # Version of Docker Compose to be used.
 
 services:
-  db: # Definición del servicio de la base de datos PostgreSQL.
-    image: postgres:latest # Imagen de Docker utilizada para crear el contenedor, en este caso, la última versión de PostgreSQL.
-    restart: always # Configuración para reiniciar el contenedor siempre que Docker o el sistema operativo se reinicien.
+  db: # Definition of the PostgreSQL database service.
+    image: postgres:latest # Docker image used to create the container, in this case, the latest version of PostgreSQL.
+    restart: always # Configuration to restart the container whenever Docker or the operating system restarts.
     environment:
-      - POSTGRES_USER=postgres # Nombre de usuario para la base de datos PostgreSQL.
-      - POSTGRES_PASSWORD=postgres # Contraseña del usuario de la base de datos PostgreSQL.
+      - POSTGRES_USER=postgres # Username for the PostgreSQL database.
+      - POSTGRES_PASSWORD=postgres # Password for the PostgreSQL database user.
     ports:
-      - "5432:5432" # Mapeo del puerto 5432 del contenedor al puerto 5432 del host.
+      - "5432:5432" # Mapping port 5432 of the container to port 5432 of the host.
     volumes:
-      - db:/var/lib/postgresql/data # Montaje de un volumen para persistir los datos de la base de datos en el directorio /var/lib/postgresql/data dentro del contenedor.
+      - db:/var/lib/postgresql/data # Mounting a volume to persist database data in the /var/lib/postgresql/data directory inside the container.
 
-  pgadmin: # Definición del servicio pgAdmin.
-    image: dpage/pgadmin4 # Imagen de Docker utilizada para crear el contenedor, que es la imagen oficial de pgAdmin 4.
-    container_name: pgadmin # Nombre del contenedor.
-    restart: always # Configuración para reiniciar el contenedor siempre que Docker o el sistema operativo se reinicien.
+  pgadmin: # Definition of the pgAdmin service.
+    image: dpage/pgadmin4 # Docker image used to create the container, which is the official pgAdmin 4 image.
+    container_name: pgadmin # Container name.
+    restart: always # Configuration to restart the container whenever Docker or the operating system restarts.
     ports:
-      - "5050:80" # Mapeo del puerto 5050 del contenedor al puerto 80 del host.
+      - "5050:80" # Mapping port 5050 of the container to port 80 of the host.
     environment:
-      - PGADMIN_DEFAULT_EMAIL=johanjimenez0210@gmail.com # Correo electrónico predeterminado para la cuenta de administrador en pgAdmin.
-      - PGADMIN_DEFAULT_PASSWORD=123123123 # Contraseña predeterminada para la cuenta de administrador en pgAdmin.
+      - PGADMIN_DEFAULT_EMAIL=johanjimenez0210@gmail.com # Default email for the admin account in pgAdmin.
+      - PGADMIN_DEFAULT_PASSWORD=123123123 # Default password for the admin account in pgAdmin.
 
 volumes:
-  db: # Definición de un volumen llamado "db".
-    driver: local # Tipo de driver de volumen local.
+  db: # Definition of a volume named "db".
+    driver: local # Type of local volume driver.
 
-  cache: # Definición de un volumen llamado "cache".
-    driver: local # Tipo de driver de volumen local.
+  cache: # Definition of a volume named "cache".
+    driver: local # Type of local volume driver.
